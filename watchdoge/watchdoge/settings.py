@@ -157,8 +157,6 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
-EMAIL_PASSWORD = 'nhox aosn cwfi msqb'
-
 
 CELERY_BROKER_URL = 'redis://localhost:6380/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6380/0'
