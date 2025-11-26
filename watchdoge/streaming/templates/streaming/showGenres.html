@@ -1,0 +1,93 @@
+{% extends 'layouts.html' %}
+{% block title %}
+<title>
+    Genre List
+</title>
+{% endblock %}
+{% block main_content %}
+
+
+<div class="container mt-1">
+    
+    <div class="row d-flex justify-content-center">
+
+        <h2 class="text-center">Genres List</h2>
+        <div class="col-md-6">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="row">#</th>
+                        <th scope="row" class="col-6">Genre Name</th>
+                        <th scope="row" class="col-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for genre in page_obj %}
+                    <tr>
+                        <td>
+                            {{ forloop.counter0|add:page_obj.start_index }}
+                        </td>
+                        <td>{{genre.name}}</td>
+                        <td>
+                            <a href="{% url 'admin-edit-genre' genre.id %}" class="btn btn-secondary">
+                                <i class='bx bx-edit-alt'></i>
+                            </a>
+                            &nbsp;
+                            <a href="{% url 'delete-genre' genre.id %}" class="btn btn-danger"
+                                onclick="return confirm('Are you sure you want to DELETE this item?')">
+                                <i class='bx bx-trash'></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No genres found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- Add genre button -->
+            <div>
+                <a href="{% url 'add-genre' %}" class="btn btn-success ">Add Genre</a>
+            </div>
+            <!-- pagination -->
+            <nav aria-label="Page navigation example " class="mt-3">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    {% else %}
+
+                    <li class="page-item disabled">
+                        <a class="page-link">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

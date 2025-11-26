@@ -1,0 +1,109 @@
+{% extends 'user_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Watch {{movie.title}}</title>
+
+{% endblock %}
+
+{% block main_content %}
+<div class="container mt-1 mb-3 p-3">
+    <!-- Movie Details -->
+
+    <div class="row mx-0 g-0 d-flex justify-content-center detail-box centermt-2 shadow p-2">
+        <div class="col-6 col-md-4 p-2 d-flex justify-content- detail-box-image">
+            <img src="{{movie.poster.url}}" class="img-fluid rounded-start" alt="{{movie.title}}" width="250">
+        </div>
+        <div class="col-sm-6 col-md-8 d-flex align-items-center detail-box-info">
+            <div class="card-body p-4 movie-detail">
+                <h2 class="card-title">{{movie.title}}</h2>
+
+                <div class="my-3 fav-watch-trailer d-flex ">
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'toggle-favorite' movie.id %}">
+                        {% csrf_token %}
+                        {% if is_favorite %}
+                        <button type="submit" class="btn btn-danger mx-1"><i class="fas fa-heart"></i>
+                            Favorite</a></button>
+                        {% else %}
+                        <button type="submit" class="btn btn-outline-danger mx-1"><i class="fal fa-heart"></i>
+                            Favorite</a></button>
+                        {% endif %}
+                    </form>
+                    <form method="post" action="{% url 'add-to-watchlist' movie.id %}">
+                        {% csrf_token %}
+                        {% if in_watchlist %}
+                        <button type="submit" class="btn btn-secondary disabled mx-1">In Watchlist</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-outline-secondary mx-1"><i class="far fa-plus"></i> Add to
+                            Watchlist</button>
+                        {% endif %}
+                    </form>
+                    {% else %}
+                    <a href="#" class="btn btn-danger disabled mx-1">
+                        <i class="fal fa-heart"></i> Favorite</a>
+                    <a href="#" class="btn btn-secondary disabled mx-1">
+                        <i class="far fa-plus"></i> Add to Watchlist</a>
+                    {% endif %}
+
+                    <a href="{{ movie.trailerUrl }}" class="btn btn-outline-warning" target="_blank"
+                        rel="noopener noreferrer">
+                        <i class="fas fa-video"></i> Watch Trailer
+                    </a>
+                </div>
+                <div class="my-3">
+                    <a href="{% url 'watch-movie' movie.id %}" class="btn btn-outline-light rounded-pill px-4 py-2">
+                        Watch Now <i class="fas fa-play-circle"></i>
+                    </a>
+                </div>
+                <p><strong>Overview:</strong></p>
+                <p class="card-text">{{movie.description}}</p>
+                <h6 class="card-text"><strong>Release Year:</strong> {{movie.release_year}}</h6>
+                <p class="card-text">
+                    <strong>Genres:</strong>&nbsp; {% for genre in movie.genres.all %}
+                    <a href="{% url 'movies-by-genre' genre.name %}"
+                        class="btn btn-outline-light btn-sm rounded-pill text-decoration-none">{{genre.name}}</a>
+                    {% endfor %}
+                </p>
+
+                <p class="card-text"><strong>Duration:</strong> {{movie.duration_minutes}} mins</p>
+            </div>
+        </div>
+    </div>
+    <!-- Movie Details -->
+
+    <br class="my-2">
+
+    <!-- More Movies -->
+    <div class="container px-0 mb-2">
+
+        <h1 class="mt-2 recomm-title">You may also like</h1>
+        <div class="row row-cols-1 row-cols-md-5 g-4 m-3">
+            {% for movie in recommended_movies %}
+            <div class="col recomm-list">
+                <a href="{% url 'movie-details' movie.id %}" class="text-decoration-none">
+                    <div class="card movie-card">
+                        <div class="card-header p-2 d-flex justify-content-center">
+                            <img src="{{ movie.poster.url }}" class="card-img-top " alt="{{ movie.title }}"
+                                style="max-width: 150px;height: 200px;">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate"><strong>{{ movie.title }}</strong></h5>
+                            <p class="card-text"><small class="text-body">Released Year:
+                                    {{movie.release_year}}</small>
+                            </p>
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- More Movies -->
+</div>
+
+
+
+{% endblock %}

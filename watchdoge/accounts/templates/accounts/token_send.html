@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+<title>Token</title>
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-center mt-4">
+        <div class="col-md-6">
+
+            <div class="container card">
+                <h3 class="card-head text-center">Token Sent!</h3>
+                <hr>
+                <div class="card-title text-center">Please check your mail.</div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,193 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="shortcut icon" href="{% static 'images/DogeInc.ico' %}" type="image/x-icon" />
+
+  <!-- bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+
+  <!-- boxicons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- fontawesome cdn link css -->
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+  {% block title %} {{section.title}} {% endblock %}
+
+  <link rel="stylesheet" href="{% static 'css/user_css.css' %}">
+</head>
+
+<body class="">
+  <header class="p-3 shadow-sm">
+    <div class="container-fluid">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-between">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <img src="{% static 'images/logo.png' %}" alt="LOGO" height="40" class="logo" />
+        </a>
+        &nbsp;
+        <!-- Menu -->
+        <button class="btn btn-outline-light mx-2" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasMenu" aria-controls="offcanvasWithBothOptions">
+          <i class="far fa-bars"></i>&nbsp;Browse
+        </button>
+
+        <!-- <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 mx-2">
+                    <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                </ul> -->
+
+        <!-- Search -->
+        <form class="col-4 col-lg-6 mb-lg-0 me-lg-3" role="search" action="{% url 'movie-search' %}" method="GET">
+          <input type="search" name="query" class="form-control form-control-dark "
+            placeholder="{% if not query %}Search...{% else %} {{query}}{% endif %}" aria-label="Search" />
+        </form>
+
+        <div class="col-2 d-flex justify-content-end">
+          {% if user.is_authenticated %}
+          <div class="flex-shrink-0 dropdown">
+            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{{ user.userprofile.profile_picture.url }}" alt="" width="32" height="32"
+                class="rounded-circle" />
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+              <li>
+                <p class="text-muted text-center">{{ user.username }}</p>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'user-profile' %}">Profile</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'watchlist' %}">WatchList</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <a class="dropdown-item" href="{% url 'logout' %}">Sign out</a>
+              </li>
+            </ul>
+          </div>
+          {% else %}
+          <div class="text-end">
+            <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-warning">Sign-up</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- offcanvas Menu -->
+  <div class="offcanvas offcanvas-start" data-bs-theme="dark" data-bs-scroll="true" data-sb-backdrop="true"
+    tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+    <div class="offcanvas-header">
+      <h4 class="offcanvas-title" id="#offcanvasMenuLabel">Menu</h4>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="list-group">
+        <a href="/" class="text-decoration-none list-group-item-action p-2">
+          <h5><i class="fas fa-home-alt"></i>&nbsp;&nbsp;Home</h5>
+        </a>
+        <hr class="divider" />
+        <a href="{% url 'movies-list' %}" class="text-decoration-none list-group-item-action p-2">
+          <h5><i class="fal fa-film"></i>&nbsp;&nbsp;Movies</h5>
+        </a>
+        <hr class="divider" />
+        <a href="#" class="text-decoration-none list-group-item-action p-2">
+          <h5><i class="fal fa-trophy-alt"></i>&nbsp;&nbsp;Top Rated</h5>
+        </a>
+      </div>
+      <hr class="divider" />
+      <div class="list-group">
+        <h5>Genres:</h5>
+        <br />
+        <div class="d-flex flex-wrap">
+          {% for genre in all_genres %}
+          <a href="{% url 'movies-by-genre' genre.name %}" class="text-decoration-none">
+            <button class="btn btn-outline-dark btn-light m-1 list-group-item rounded-corner">
+              {{ genre.name}}
+            </button>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      <hr class="divider" />
+      {% if user.is_staff %}
+      <div class="list-group">
+        <a href="{% url 'admin-dashboard' %}" class="btn btn-lg btn-secondary">Admin Dashboard</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <!-- main content -->
+  <div class="main container-fluid mb-auto" style="min-height: 420px">
+    {% for msg in messages %} {% if msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+    <div class="alert alert-success alert-dismissible fade show">
+      {{msg}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %} {% if msg.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+    <div class="alert alert-danger alert-dismissible fade show">
+      {{msg}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %} {% endfor %}
+    {% block main_content %} {% endblock %}
+  </div>
+  <!-- main content -->
+
+  <!-- Footer -->
+
+  <div class="container-fluid mb-0 shadow-lg">
+    <footer class="py-3 mt-4">
+      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item">
+          <a href="{% url 'home'%}" class="nav-link px-2 text-body-white text-decoration-none text-white">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link px-2 text-body-white text-decoration-none text-white">Terms of Service</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link px-2 text-body-white text-decoration-none text-white">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link px-2 text-body-white text-decoration-none text-white">FAQs</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link px-2 text-body-white text-decoration-none text-white">About</a>
+        </li>
+      </ul>
+      <p class="text-center text-body-light">
+        &copy; 2025 WatchDoge, Doge Inc
+        <span><img src="{% static 'images/DogeInc.ico' %}" alt="Doge Inc" height="15" width="15" /></span>
+      </p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <script>
+    AOS.init({
+      duration: 1200,
+      once: true,
+    });
+  </script>
+</body>
+
+</html>

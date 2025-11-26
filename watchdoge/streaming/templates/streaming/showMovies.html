@@ -1,0 +1,174 @@
+{% extends 'layouts.html' %}
+{% block title %}
+<title>
+    Movie List
+</title>
+{% endblock %}
+{% block main_content %}
+
+<div class="container mt-1">
+
+
+    <div class="d-flex flex-wrap justify-content-between">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-success btn-align-right" data-bs-toggle="modal"
+            data-bs-target="#searchModal">
+            Search
+        </button>
+        <!-- Upload button -->
+        <a href="{% url 'upload-movie' %}" class="btn btn-success ">Upload Movie</a>
+    </div>
+    <div class="row d-flex justify-content-center">
+
+        <h2 class="text-center">Movies List</h2>
+
+        <div class="col-md-12">
+
+            <table class="table table-bordered table-hover ">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="row" class="col-1">#</th>
+                        <th scope="row" class="col-1">Title</th>
+                        <th scope="row" class="col-1">Genres</th>
+                        <th scope="row" class="">Description</th>
+                        <th scope="row" class="col-1">Duration</th>
+                        <th scope="row" class="col-1">Poster </th>
+                        <th scope="row" class="col-1">Trailer</th>
+                        <th scope="row" class="col-1">Release Year</th>
+                        <th scope="row" class="col-1">Status</th>
+                        <th scope="row" class="col-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movie in page_obj %}
+                    <tr class="text-center ">
+                        <td>
+                            {{ forloop.counter0|add:page_obj.start_index }}
+                        </td>
+                        <td><a href="{% url 'admin-movie-details' movie.id %}">{{movie.title}}</a>
+                        </td>
+                        <td>
+                            {% for genre in movie.genres.all %}
+                            {{genre.name}}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{movie.description}}</td>
+                        <td>{{movie.duration_minutes}}</td>
+                        <td>
+                            {% if movie.poster %}
+                            <img src="{{movie.poster.url}}" alt="{{movie.poster.url}}" width="50">
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{movie.trailerUrl}}" target="_blank">Trailer</a>
+                        </td>
+                        <td>{{movie.release_year}}</td>
+                        <td>
+                            {% if movie.status == "uploaded" %}Uploaded{% endif %}
+                            {% if movie.status == "processing" %}Processing…{% endif %}
+                            {% if movie.status == "ready" %}Ready{% endif %}
+                            {% if movie.status == "failed" %}Failed{% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'admin-edit-movie' movie.id %}" class="btn btn-secondary btn-sm">
+                                <i class='bx bx-edit-alt'></i>
+                            </a>
+                            &nbsp;
+                            <a href="{% url 'delete-movie' movie.id %}" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure you want to DELETE this item?')">
+                                <i class='bx bx-trash'></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9">No movies found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+            <!-- pagination -->
+            <nav aria-label="Page navigation example" class="mt-3">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li>
+                    {% endif %}
+
+
+
+                    {% for num in page_obj.paginator.page_range %}
+
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+
+                    {% endfor %}
+
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    {% else %}
+
+                    <li class="page-item disabled">
+                        <a class="page-link">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+        </div>
+        <!-- search moadal -->
+        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="searchModalLabel">Search</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="get" action="{% url 'admin-movies-list' %}" class="form-inline mb-3">
+                            <input type="text" name="q" class="form-control mr-2" placeholder="Search movies..."
+                                value="{% if query %}{{ query }}{% endif %}">
+
+                            <div class="form-group">
+                                <strong>Filter by Genre:</strong><br>
+                                {% for genre in genres %}
+                                <label class="m-1">
+                                    <input type="checkbox" name="genres" value="{{ genre.id }}">
+                                    {{ genre.name }}
+                                </label>
+                                {% endfor %}
+                            </div>
+
+                            <button type="submit" class="btn btn-success mt-1">Filter</button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- search modal end -->
+    </div>
+</div>
+{% endblock %}

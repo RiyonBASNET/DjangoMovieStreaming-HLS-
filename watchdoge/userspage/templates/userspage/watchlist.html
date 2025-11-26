@@ -1,0 +1,98 @@
+{% extends 'user_base.html' %} {% load static %} {% block title %}
+<title>Watchlist</title>
+
+{% endblock %} {% block main_content %}
+
+<div class="container profile mt-3">
+   
+
+    <!-- recently viewed -->
+    <h2 class="text-center">Recently Watched</h2>
+    {% if watched_movies %}
+    <div class="container cols-md-12 d-flex justify-content-center">
+        <table class="table table-border table-dark">
+            <thead>
+                <tr>
+                    <th scope="row" class="col-1">#</th>
+                    <th scope="row" class="col-1">Image</th>
+                    <th scope="row" class="col-2">Title</th>
+                    <th scope="row" class="col-2">Genre</th>
+                    <th scope="row" class="col-1">Release Year</th>
+                    <th scope="row" class="col-1">Watched At</th>
+                    <th scope="row" class="col-1">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in watched_movies %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        {% if item.movie.poster %}
+                        <img src="{{item.movie.poster.url}}" alt="{{item.movie.title}}" width="50" />
+                        {% endif %}
+                    </td>
+                    <td>{{item.movie.title}}</td>
+                    <td>
+                        {% for genre in item.movie.genres.all %} {{genre.name}} {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{item.movie.release_year}}</td>
+                    <td>{{item.watched_at|date:"Y-m-d"}}</td>
+                    <td>
+                        <a href="{% url 'remove-from-watched' item.id %}" class="text-decoration-none"
+                            onclick="return confirm('Are you sure you want to remove this movie from your watched list?');">Remove</a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center m-3">Wow! Such empty.</p>
+    {% endif %}
+
+    <h2 class="text-center">Plan to Watch</h2>
+    {% if plan_to_watch %}
+    <div class="container cols-md-12 d-flex justify-content-center">
+        <table class="table table-border table-dark">
+            <thead>
+                <tr>
+                    <th scope="row" class="col-1">#</th>
+                    <th scope="row" class="col-1">Image</th>
+                    <th scope="row" class="col-2">Title</th>
+                    <th scope="row" class="col-2">Genre</th>
+                    <th scope="row" class="col-2">Release Year</th>
+                    <th scope="row" class="col-1">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in plan_to_watch %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <img src="{{ item.movie.poster.url }}" alt="{{ item.movie.title }}" width="50" />
+                    </td>
+                    <td>{{ item.movie.title }}</td>
+                    <td>
+                        {% for genre in item.movie.genres.all %} {{genre.name}}
+                        {% if not forloop.last %}, {% endif %} {% endfor %}
+                    </td>
+                    <td>{{ item.movie.release_year }}</td>
+                    <td>
+                        <a href="{% url 'watch-movie' item.movie.id %}" class="btn btn-primary btn-sm">Watch Now</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center m-3">List empty. Try adding movies to watchlist.</p>
+    {% endif %}
+</div>
+<!-- recently viewed -->
+
+{% endblock %}

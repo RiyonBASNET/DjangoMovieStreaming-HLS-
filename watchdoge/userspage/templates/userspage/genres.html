@@ -1,0 +1,15 @@
+{% extends 'user_base.html' %}
+
+{% block title %}
+<title>All Genres</title>
+{% endblock %}
+
+{% block main_content %}
+
+<ul>
+    {% for genre in genres %}
+    <li>{{genre.name}}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

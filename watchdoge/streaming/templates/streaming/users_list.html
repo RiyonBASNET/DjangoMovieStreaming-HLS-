@@ -1,0 +1,114 @@
+{% extends 'layouts.html' %}
+{% block title %}
+<title>
+    Users List
+</title>
+{% endblock %}
+{% block main_content %}
+
+
+<div class="container mt-1">
+
+    <div class="row d-flex justify-content-center">
+
+        <h2 class="text-center">Users List</h2>
+        <div class="col-md-8">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr class="text-center">
+                        <th scope="row">#</th>
+                        <th scope="row">Username</th>
+                        <th scope="row">Email</th>
+                        <th scope="row">Firstname</th>
+                        <th scope="row">Lastname</th>
+                        <th scope="row">Active</th>
+                        <th scope="row">Admin</th>
+                        <th scope="row flex-wrap">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in page_obj %}
+                    <tr class="text-center">
+                        <td>
+                            {{ forloop.counter0|add:page_obj.start_index }}
+                        </td>
+                        <td>{{user.username}}</td>
+                        <td>{{user.email}}</td>
+                        <td>
+                            {% if user.firstname %}
+                            {{ user.firstname }}
+                            {% else %}
+                            &minus;
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.firstname %}
+                            {{ user.firstname }}
+                            {% else %}
+                            &minus;
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{user.is_active|yesno:'yes,no' }}
+                        </td>
+                        <td>{{user.is_staff|yesno:'yes,no'}}</td>
+                        <td>
+                            <a href="#" class="btn btn-secondary">
+                                <i class='bx bx-edit-alt'></i>
+                            </a>
+                            &nbsp;
+                            <a href="#" class="btn btn-danger"
+                                onclick="return confirm('Are you sure you want to DELETE this item?')">
+                                <i class='bx bx-trash'></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8">No users found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+           
+            <!-- pagination -->
+            <nav aria-label="Page navigation example " class="mt-3">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    {% else %}
+
+                    <li class="page-item disabled">
+                        <a class="page-link">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

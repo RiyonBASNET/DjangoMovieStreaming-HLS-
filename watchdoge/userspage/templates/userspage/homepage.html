@@ -1,0 +1,113 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %}
+<title>WatchDoge | Homepage</title>
+{% endblock %}
+
+{% block main_content %}
+<!-- carousel -->
+<div id="carouselExampleIndicators" class="carousel slide " data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+            aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+            aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner ">
+        <div class="carousel-item ">
+            <img src="{% static 'images/6.jpg' %}" class="d-block w-100 " alt="...">
+            <div class="carousel-caption d-none d-md-block text-start text-light "
+                style="background-color: rgba(0,0,0,0.4);">
+                <h2>Deadpool & Wolverine</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam sint tempora eius molestias
+                    perferendis obcaecati ab sed et? Culpa, accusantium.</p>
+            </div>
+
+        </div>
+        <div class="carousel-item">
+            <img src="{% static 'images/2.jpg' %}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block text-start text-light"
+                style="background-color: rgba(0,0,0,0.4);">
+                <h2>The Conjuring: Last Rites</h2>
+                <p>Some representative placeholder content for the first slide.</p>
+            </div>
+        </div>
+        <div class="carousel-item active">
+            <img src="{% static 'images/1.jpg' %}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block text-start text-light"
+                style="background-color: rgba(0,0,0,0.4);">
+                <h2>Superman</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, laboriosam quas! Quam explicabo
+                    libero nesciunt impedit accusantium ipsum architecto itaque?</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- New Release -->
+<div class="container mt-3 ">
+    <h2 class="text-center p-2">New Releases</h2>
+    <div class="row row-cols-1 row-cols-md-5 g-4 m-3">
+        {% for movie in latest_movies %}
+        <div class="col">
+            <a href="{% url 'movie-details' movie.id %}" class="text-decoration-none">
+                <div class="card movie-card cols-md-1">
+                    <div class="card-header p-2 d-flex justify-content-center">
+                        <img src="{{ movie.poster.url }}" class="card-img-top " alt="{{ movie.title }}"
+                            style="max-width: 150px;height: 200px;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <p class="card-text text-sm-start"><strong>Release year: </strong>{{movie.release_year}}</p>
+                    </div>
+
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center">
+        <a href="{% url 'movies-list' %}" class="btn btn-success btn-lg text-center rounded-pill m-2 btn-all-movies">All
+            movies</a>
+    </div>
+</div>
+<!-- New Release end-->
+
+<!-- Coming Soon -->
+<div class="container mt-3 ">
+    <h2 class="text-center p-2">Coming Soon</h2>
+    <div class="row row-cols-1 row-cols-md-5 g-4 m-3">
+        {% for movie in coming_soon %}
+        <div class="col">
+            <a href="{% url 'movie-details' movie.id %}" class="text-decoration-none">
+                <div class="card movie-card" style="height: 290px;">
+                    <div class="card-header p-2 d-flex justify-content-center">
+                        <img src="{{ movie.poster.url }}" class="card-img-top " alt="{{ movie.title }}"
+                            style="max-width: 150px;height: 200px;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate"><strong>{{ movie.title }}</strong></h5>
+                        <p class="card-text text-sm-start">Release: {{movie.release_year}}</p>
+                    </div>
+
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+<!-- Coming Soon end -->
+{% endblock %}

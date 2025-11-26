@@ -1,0 +1,241 @@
+{% extends 'user_base.html' %} {% load static %} {% block title %}
+<title>{{profile.user.username}}'s Profile</title>
+<style>
+    /* Container for horizontal scrolling */
+    .scroll-container {
+        display: flex;
+        /* Arrange the images horizontally */
+        overflow-x: auto;
+        /* Enable horizontal scrolling */
+        gap: 10px;
+        /* Space between images */
+        padding: 10px;
+        /* Padding around the container */
+    }
+
+    /* Style for each movie image */
+    .scroll-container img {
+        height: 180px;
+        /* Set height for images */
+        width: auto;
+        /* Maintain aspect ratio */
+        border-radius: 8px;
+        /* Rounded corners */
+        object-fit: cover;
+        /* Ensure the image covers its box */
+    }
+
+    /* Optional: Styling for the scroll container itself */
+    .scroll-container::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .scroll-container::-webkit-scrollbar-thumb {
+        background: #888;
+        /* Color of the scrollbar */
+        border-radius: 4px;
+    }
+
+    .scroll-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        /* Track color */
+    }
+
+    .modal-content {
+        background-color: #2f4b4d;
+    }
+</style>
+{% endblock %} {% block main_content %}
+
+<div class="container profile mt-3">
+
+    <h2 class="text-center">Profile</h2>
+
+    <table class="table table-dark border border-0 mx-0">
+        <tr>
+            <th>
+                Profile Image
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#editImageModal">
+                    <i class="fal fa-edit"></i>
+                </button>
+            </th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>
+                Bio
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#editBioModal">
+                    <i class="fal fa-edit"></i>
+                </button>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <img src="{{ profile.profile_picture.url }}" alt="#" style="width: 150px; height: 150px"
+                    class="rounded-circle" />
+            </td>
+            <td>
+                <p>{{ profile.user.username }}</p>
+            </td>
+            <td>
+                <p>{{ profile.user.email }}</p>
+            </td>
+            <td>
+                <p class="card-text">{{ profile.bio|default:"Such Empty" }}</p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- edit profile image Modal -->
+    <div class="modal fade" id="editImageModal" tabindex="-1" aria-labelledby="editImageLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <form method="POST" enctype="multipart/form-data" action="{% url 'edit-profile-pic' user.username %}"
+                    id="imageForm">
+                    {% csrf_token %}
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">Edit Profile Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}'s profile picture"
+                            class="mb-2" style="width: 150px; height: 150px" />
+
+                        <input type="file" name="userImage" class="form-control" onchange="previewImage(event)" />
+                        <div class="text-center mt-2">
+                            <img id="imagePreview" src="" alt="Image Preview" class="mb-2"
+                                style="width: 150px; height: 150px" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- edit profile bio Modal -->
+    <div class="modal fade" id="editBioModal" tabindex="-1" aria-labelledby="editBioLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST" action="{% url 'edit-profile-bio' user.username %}" id="bioForm">
+                    {% csrf_token %}
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bioModalLabel">Edit Bio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea name="bio" class="form-control" placeholder="Enter new bio">
+{{ profile.bio }}</textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- favorite movies -->
+    <h2 class="text-center">Favorite Movies</h2>
+
+    <div class="scroll-container row-cols-md-12">
+        {% for item in favorite_movies %}
+        <a href="{% url 'movie-details' item.movie.id%}" class="text-decoration-none">
+            <div class="card py-2" style="max-width: 180px; min-width: 100px;">
+                <div class="card-head d-flex justify-content-center p-2">
+                    <img src="{{item.movie.poster.url}}" class="img-fluid rounded-start card-image-top"
+                        alt="{{item.movie.title}}" />
+                </div>
+                <div class="card-body">
+                    <p class="cart-text text-truncate">{{item.movie.title}}</p>
+                </div>
+            </div>
+        </a>
+        {% empty %}
+        <p class="text-center m-3">Wow! Such empty.</p>
+        {% endfor %}
+    </div>
+    <!-- favorite movies -->
+
+    <!-- recently viewed -->
+    <h2 class="text-center">Recently Watched</h2>
+    {% if watch_history %}
+    <div class="container cols-md-12 d-flex justify-content-center">
+        <table class="table table-border table-dark">
+            <thead>
+                <tr>
+                    <th scope="row" class="col-1">#</th>
+                    <th scope="row" class="col-1">Image</th>
+                    <th scope="row" class="col-2">Title</th>
+                    <th scope="row" class="col-2">Genre</th>
+                    <th scope="row" class="col-1">Watched date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in watch_history %}
+                <tr>
+                    <td>{{ forloop.counter0|add:1 }}</td>
+                    <td>
+                        {% if item.movie.poster %}
+                        <img src="{{item.movie.poster.url}}" alt="{{item.movie.title}}" width="50" />
+                        {% endif %}
+                    </td>
+                    <td>{{item.movie.title}}</td>
+                    <td>
+                        {% for genre in item.movie.genres.all %} {{genre.name}}
+                        {% if not forloop.last %}, {% endif %} {% endfor %}
+                    </td>
+                    <td>{{item.watched_at|date:"Y-m-d"}}</td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center m-3">Wow! Such empty.</p>
+    {% endif %}
+</div>
+<!-- recently viewed -->
+
+<!-- similar to your taste -->
+
+<script>
+    // Reset the form when the modal is closed
+    var bioModal = document.getElementById("editBioModal");
+    bioModal.addEventListener("hidden.bs.modal", function () {
+        // Clear all form fields
+        var form = document.getElementById("bioForm");
+        form.reset(); // Resets the form to its initial state (empty fields)
+    });
+    // Reset the form when the modal is closed
+    var imageModal = document.getElementById("editImageModal");
+    imageModal.addEventListener("hidden.bs.modal", function () {
+        // Clear all form fields
+        var form = document.getElementById("imageForm");
+        form.reset(); // Resets the form to its initial state (empty fields)
+        document.getElementById("imagePreview").style.display = "none";
+    });
+</script>
+<script>
+    // preview image
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var imagePreview = document.getElementById("imagePreview");
+            imagePreview.style.display = "block"; // Make sure the image preview is visible
+            imagePreview.src = reader.result; // Set the src to the selected file's data URL
+        };
+        reader.readAsDataURL(event.target.files[0]); // Read the image file
+    }
+</script>
+
+{% endblock %}

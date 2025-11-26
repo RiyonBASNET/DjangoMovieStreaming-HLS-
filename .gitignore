@@ -1,0 +1,81 @@
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+*.log
+
+# -------------------------
+# Virtual Environment
+# -------------------------
+venv/
+ENV/
+env/
+.venv/
+
+# -------------------------
+# Django / Project Files
+# -------------------------
+*/__pycache__/
+*.sqlite3
+db.sqlite3-journal
+
+# Ignore .env or secret settings
+.env
+*.env
+*/local_settings.py
+
+# -------------------------
+# Media & Static Files
+# (Your project handles posters, videos, HLS segments)
+# -------------------------
+media/
+static/
+staticfiles/
+
+# Video uploads
+media/movies/files/
+media/movies/posters/
+media/videos/
+media/hls/
+
+# HLS output
+*.ts
+*.m3u8
+
+# -------------------------
+# Node / Frontend (If exists)
+# -------------------------
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# -------------------------
+# Editor / IDE Files
+# -------------------------
+.vscode/
+.idea/
+*.iml
+
+# -------------------------
+# OS Files
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# Celery (if used)
+# -------------------------
+celerybeat-schedule
+celerybeat.pid
+
+# -------------------------
+# Backup / Temp
+# -------------------------
+*.bak
+*.swp
+*.tmp

@@ -1,0 +1,126 @@
+{% extends 'layouts.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}
+<title>{{movie.title}} </title>
+
+<!-- Include Plyr -->
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
+<!-- hls.js (for browsers that don't support HLS natively) -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const video = document.getElementById('player');
+        const source = "{{MEDIA_URL}}{{ movie.hls_path }}";
+        const defaultOptions = {};
+
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(source);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                video.play();
+            });
+            hls.on(Hls.Events.ERROR, function (event, data) {
+                if (data.fatal) {
+                    alert("Failed to load video.");
+                }
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // Safari and iOS
+            video.src = source;
+            video.addEventListener('loadedmetadata', () => {
+                video.play();
+            });
+        }
+
+
+        const player = new Plyr(video, defaultOptions);
+    });
+</script>
+<!-- Plyr -->
+<style>
+    #player {
+        width: 100%;
+        height: auto;
+        max-width: auto;
+        max-height: 100vh;
+        object-fit: contain;
+    }
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="container mt-1">
+    <div class="row d-flex justify-content-center ">
+        <div class="col-md-8 card video-card">
+            <div class="card-head p-2">
+
+
+                {% if movie.status == "uploaded" %}
+                <h3 class="text-info">Uploaded. Waiting for conversion...</h3>
+                {% elif movie.status == "processing" %}
+                <h3 class="text-warning">Processing… please wait</h3>
+                {% elif movie.status == "ready" %}
+                <video id="player" controls crossorigin playsinline poster="{{ movie.poster.url }}">
+
+                    <source src="{{ MEDIA_URL }}{{ movie.hls_path }}" type="application/x-mpegURL">
+                </video>
+
+                {% elif movie.status == "failed" %}
+                <h3 class="text-danger">Conversion failed. Contact admin.</h3>
+                {% endif %}
+
+
+            </div>
+            <div class="card-body">
+                <h2 class="card-title"><strong>{{ movie.title }}</strong></h2>
+
+                <div class="movieDescription ">
+                    <p><strong>Description:</strong></p>
+                    <p>{{ movie.description }}</p>
+                </div>
+                <div class="movieGenres">
+                    <p><strong>Genres:</strong></p>
+                    <p>
+                        {% for genre in movie.genres.all %}
+                        {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h5>Similar Movies</h5>
+            <div class="list-group">
+                {% for item in allMoives %}
+                <a href="{% url 'admin-movie-details' item.id %}"
+                    class="list-group-item list-group-item-action text-decoration-none">
+                    <img src="{{ item.poster.url }}" alt="" width="40">
+                    &nbsp;
+                    {{item.title}}
+                </a>
+
+                {% endfor %}
+            </div>
+            <br>
+            <h5>Other Movies</h5>
+            <div class="list-group">
+                {% for item in other_movies %}
+                <a href="{% url 'admin-movie-details' item.id %}"
+                    class="list-group-item list-group-item-action text-decoration-none">
+                    <img src="{{ item.poster.url }}" alt="" width="40">
+                    &nbsp;
+                    {{item.title}}
+                </a>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
