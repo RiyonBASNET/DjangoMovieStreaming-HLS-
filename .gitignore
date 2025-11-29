@@ -38,7 +38,7 @@ media/*
 
 # --- KEEP THESE ---
 # Keep movies folder (empty)
-!media/movies/
+media/movies/
 
 # Keep profile_pictures folder
 !media/profile_pictures/
@@ -54,6 +54,7 @@ media/profile_pictures/users/*   # user profile pictures
 # HLS output
 # -------------------------
 *.ts
+*.vtt
 *.m3u8
 
 # -------------------------
