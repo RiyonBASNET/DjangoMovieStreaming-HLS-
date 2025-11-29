@@ -47,8 +47,8 @@ media/movies/
 !media/profile_pictures/default_icon.png
 
 # --- IGNORE USER UPLOADS ---
-media/movies/*          # posters, videos
-media/profile_pictures/users/*   # user profile pictures
+media/movies/
+media/profile_pictures/users/   
 
 # -------------------------
 # HLS output
