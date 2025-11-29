@@ -23,32 +23,25 @@ env/
 */__pycache__/
 *.sqlite3
 db.sqlite3-journal
-
-# Ignore .env or secret settings
 .env
 *.env
 */local_settings.py
 
 # -------------------------
-# Media Files
+# MEDIA (Ignore everything)
 # -------------------------
-
-# Ignore everything in media/
 media/*
 
-# --- KEEP THESE ---
-# Keep movies folder (empty)
-media/movies/
-
-# Keep profile_pictures folder
+# --- KEEP ONLY EMPTY FOLDERS ---
+!media/movies/
 !media/profile_pictures/
 
-# Keep default profile icon
+# --- KEEP DEFAULT ICON ONLY ---
 !media/profile_pictures/default_icon.png
 
 # --- IGNORE USER UPLOADS ---
-media/movies/
-media/profile_pictures/users/   
+media/movies/*
+media/profile_pictures/users/*
 
 # -------------------------
 # HLS output
@@ -58,7 +51,7 @@ media/profile_pictures/users/
 *.m3u8
 
 # -------------------------
-# Node / Frontend (If exists)
+# Node / Frontend
 # -------------------------
 node_modules/
 npm-debug.log
