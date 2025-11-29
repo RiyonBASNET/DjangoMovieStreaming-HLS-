@@ -244,7 +244,8 @@ def users_list(request):
     return render(request,'streaming/users_list.html',{'page_obj':page_obj})
 
 
-
+##############################################
+##############################################
 def get_similar_movies(current_movie, limit=6):
     all_movies = Movie.objects.exclude(id=current_movie.id)
     current_year = timezone.now().year

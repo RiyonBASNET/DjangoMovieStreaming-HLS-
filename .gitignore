@@ -33,7 +33,7 @@ db.sqlite3-journal
 # Media & Static Files
 # (Your project handles posters, videos, HLS segments)
 # -------------------------
-media/
+media/profile_pictures/users/
 # static/
 # staticfiles/
 
