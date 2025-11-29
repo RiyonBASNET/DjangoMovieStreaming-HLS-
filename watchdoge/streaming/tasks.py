@@ -8,7 +8,6 @@ import subprocess
 import time
 import getpass
 
-# ✅ Absolute path to your ffmpeg executable (update if different)
 FFMPEG_PATH = r"C:\ffmpeg\bin\ffmpeg.exe"
 
 @shared_task(bind=True)
