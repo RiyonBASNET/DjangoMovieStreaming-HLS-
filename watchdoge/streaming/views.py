@@ -264,3 +264,48 @@ def get_similar_movies(current_movie, limit=6):
     )
 
     return genre_matches[:limit]
+
+
+
+
+
+# Cosine Similarity
+'''
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+def get_cosine_similar_movies(current_movie, all_movies, limit=6):
+    # Step 1: Build corpus (movie description text)
+    # Combine title + genres into one string
+    corpus = []
+    movie_ids = []
+
+    for movie in all_movies:
+        genres_text = " ".join([g.name for g in movie.genres.all()])
+        text = f"{movie.title} {genres_text}"
+        corpus.append(text)
+        movie_ids.append(movie.id)
+
+    # Step 2: TF-IDF
+    vectorizer = TfidfVectorizer(stop_words="english")
+    tfidf_matrix = vectorizer.fit_transform(corpus)
+
+    # Step 3: Find index of current movie
+    current_index = movie_ids.index(current_movie.id)
+
+    # Step 4: Compute cosine similarity
+    similarity_scores = cosine_similarity(tfidf_matrix[current_index], tfidf_matrix).flatten()
+
+    # Step 5: Pair movie IDs with similarity
+    movie_similarity = list(zip(movie_ids, similarity_scores))
+
+    # Step 6: Sort & remove current movie
+    movie_similarity = sorted(movie_similarity, key=lambda x: x[1], reverse=True)
+    movie_similarity = [m for m in movie_similarity if m[0] != current_movie.id]
+
+    # Step 7: Get top N similar movies
+    similar_ids = [m[0] for m in movie_similarity[:limit]]
+
+    # Step 8: Query movies back
+    return [movie for movie in all_movies if movie.id in similar_ids]
+'''

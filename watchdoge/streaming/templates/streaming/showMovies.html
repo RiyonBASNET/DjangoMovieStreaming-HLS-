@@ -9,18 +9,18 @@
 <div class="container mt-1">
 
 
-    <div class="d-flex flex-wrap justify-content-between">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success btn-align-right" data-bs-toggle="modal"
-            data-bs-target="#searchModal">
-            Search
-        </button>
-        <!-- Upload button -->
-        <a href="{% url 'upload-movie' %}" class="btn btn-success ">Upload Movie</a>
-    </div>
     <div class="row d-flex justify-content-center">
+        <div class="d-flex flex-wrap justify-content-between mb-2">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success btn-align-right" data-bs-toggle="modal"
+                data-bs-target="#searchModal">
+                Search
+            </button>
+            <h2 class="text-center">Movies List</h2>
+            <!-- Upload button -->
+            <a href="{% url 'upload-movie' %}" class="btn btn-success ">Upload Movie</a>
+        </div>
 
-        <h2 class="text-center">Movies List</h2>
 
         <div class="col-md-12">
 
