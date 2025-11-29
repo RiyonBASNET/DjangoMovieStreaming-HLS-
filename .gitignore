@@ -33,7 +33,6 @@ db.sqlite3-journal
 # Media & Static Files
 # (Your project handles posters, videos, HLS segments)
 # -------------------------
-media/profile_pictures/users/
 # static/
 # staticfiles/
 
@@ -42,7 +41,8 @@ media/movies/files/
 media/movies/posters/
 media/videos/
 media/hls/
-
+media/movies/
+media/profile_pictures/users/
 # HLS output
 *.ts
 *.m3u8
