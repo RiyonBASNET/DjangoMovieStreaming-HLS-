@@ -34,8 +34,8 @@ db.sqlite3-journal
 # (Your project handles posters, videos, HLS segments)
 # -------------------------
 media/
-static/
-staticfiles/
+# static/
+# staticfiles/
 
 # Video uploads
 media/movies/files/

@@ -1,0 +1,104 @@
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+  }
+
+  body {
+      background: #3f3e69;
+      color: #e1dbef;
+  }
+
+  .container {
+      width: 100%;
+      padding: 10px;
+      /* background: #575068; */
+      box-shadow: 10px #e1dbef;
+  }
+
+  p {
+      text-align: center;
+      margin: 10px;
+      font-size: 13px;
+  }
+
+  a {
+      text-decoration: none;
+      color: #209bf4;
+  }
+
+  #offcanvasMenu {
+      background: #e1dbef;
+  }
+
+  .table {
+      color: #575068;
+      border: #3f3e69;
+      /* border-radius: 15px; */
+  }
+
+  .table th {
+      background: #f8708c;
+  }
+
+  .table .btn-danger {
+      background: #e70230;
+      color: #e1dbef;
+  }
+
+  .table .btn-secondary {
+      background: #575068;
+      color: #e1dbef;
+  }
+
+  .admin-form {
+      border: 2px solid #3f3e69;
+      border-radius: 15px;
+      background-color: #575068;
+      color: #f29a30;
+  }
+
+  .admin-form .btn {
+      border-radius: 10px;
+
+  }
+
+
+  .btn {
+      color: #575068;
+      background: #e1dbef;
+  }
+
+  .list-group-item {
+      background-color: #e1dbef;
+      border: 1px solid #575068;
+  }
+
+  .container .card {
+      border: 2px solid #3f3e69;
+      text-align: center;
+  }
+
+  .video-card #player {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+  }
+
+  .video-card .card .card-body div {
+      border: 1px solid #575068;
+  }
+
+  .video-card p,
+  h2 {
+      text-align: start;
+  }
+
+  hr {
+      border-top: 3px solid #f29a30;
+  }
+
+  .modal-content {
+      background: #3f3e69;
+  }
